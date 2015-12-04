@@ -4,7 +4,7 @@ import { selectReddit, fetchPostsIfNeeded, invalidateReddit } from '../actions'
 import Picker from '../components/Picker'
 import Posts from '../components/Posts'
 
-class AsyncApp extends Component {
+class App extends Component {
   constructor(props) {
     super(props)
     this.handleChange = this.handleChange.bind(this)
@@ -30,7 +30,7 @@ class AsyncApp extends Component {
   handleRefreshClick(e) {
     e.preventDefault()
 
-    const { dispatch, selectedReddit } = nextProps
+    const { dispatch, selectedReddit } = this.props
     dispatch(invalidateReddit(selectedReddit))
     dispatch(fetchPostsIfNeeded(selectedReddit))
   }
@@ -39,7 +39,7 @@ class AsyncApp extends Component {
     const { selectedReddit, posts, isFetching, lastUpdated } = this.props
     return (
       <div>
-        <Picker value={selectedReddit}>
+        <Picker value={selectedReddit}
                 onChange={this.handleChange}
                 options={[ 'reactjs', 'frontend' ]} />
         <p>
@@ -50,9 +50,9 @@ class AsyncApp extends Component {
             </span>
           }
           {!isFetching && 
-            <a href='#'
-              onClick={this.handleRefreshClick}
-              handleRefreshClick
+            <a href="#"
+              onClick={this.handleRefreshClick}>
+              Refresh
             </a>
           }
         </p>
@@ -64,7 +64,7 @@ class AsyncApp extends Component {
         }
         {posts.length > 0 &&
           <div style={{ opacity : isFetching ? 0.5 : 1 }}>
-            <Posts posts={posts> />
+            <Posts posts={posts} />
           </div>
         }
       </div>
@@ -72,7 +72,7 @@ class AsyncApp extends Component {
   }
 }
 
-AsyncApp.propTypes = {
+App.propTypes = {
   selectedReddit: PropTypes.string.isRequired,
   posts: PropTypes.array.isRequired,
   isFetching: PropTypes.bool.isRequired,
@@ -99,4 +99,4 @@ function mapStateToProps(state) {
   }
 }
 
-export default connect(mapStateToProps)(AsyncApp)
+export default connect(mapStateToProps)(App)
